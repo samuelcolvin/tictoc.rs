@@ -1,21 +1,16 @@
 
-use std::env;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-fn run() -> Result<(), ()> {
+fn run() -> Result<(), String> {
   let toc = SystemTime::now();
-  let args: Vec<String> = env::args().collect();
+  let args: Vec<String> = ::std::env::args().collect();
   if args.len() != 2 {
-    eprintln!("tic argument required.");
-    return Err(());
+    return Err("tic argument required.".to_string());
   }
 
   let tic_s = match args[1].parse::<f64>() {
-      Ok(tic_s)  => tic_s,
-      Err(_) => {
-        eprintln!("Invalid float '{}'", args[1]);
-        return Err(());
-      },
+    Ok(tic_s) => tic_s,
+    Err(_) => return Err(format!("Invalid float '{}'", args[1]))
   };
 
   let tic = UNIX_EPOCH + Duration::from_millis((tic_s * 1000.0) as u64);
@@ -34,8 +29,11 @@ fn run() -> Result<(), ()> {
 }
 
 fn main() {
-    ::std::process::exit(match run() {
-       Ok(_) => 0,
-       Err(_) => 1
-    });
+  ::std::process::exit(match run() {
+    Ok(_) => 0,
+    Err(e) => {
+      eprintln!("{}", e);
+      1
+    }
+  });
 }
