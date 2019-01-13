@@ -14,7 +14,10 @@ fn run() -> Result<(), String> {
   };
 
   let tic = UNIX_EPOCH + Duration::from_millis((tic_s * 1000.0) as u64);
-  let diff_ = toc.duration_since(tic).expect("Time went backwards");
+  let diff_ = match toc.duration_since(tic) {
+    Ok(d) => d,
+    Err(_) => return Err("tic after toc".to_string())
+  };
   let diff = diff_.as_secs() as f64 + diff_.subsec_millis() as f64 / 1000.0;
   let s: String;
   if diff < 1.0 {
@@ -32,7 +35,7 @@ fn main() {
   ::std::process::exit(match run() {
     Ok(_) => 0,
     Err(e) => {
-      eprintln!("{}", e);
+      eprintln!("{}.", e);
       1
     }
   });
