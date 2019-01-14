@@ -2,12 +2,13 @@
 
 To test
 
-```bash
-rustc toc.rs && ./toc 123456
-```
+    rustc toc.rs && ./toc 123456
+
+and
+
+    rustc tic.rs && ./tic
+
 
 To build for production
 
-```bash
-rustc -O toc.rs
-```
+    make
