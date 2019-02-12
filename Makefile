@@ -7,3 +7,4 @@ build:
 	@mv tic build/
 	rustc -C opt-level=3 -C lto -C panic=abort toc.rs
 	@mv toc build/
+	# strip build/*
